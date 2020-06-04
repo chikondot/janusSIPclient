@@ -1,4 +1,4 @@
-package com.example.janus_sip_client
+package chikondot.maswerasei
 
 import io.flutter.embedding.android.FlutterActivity
 

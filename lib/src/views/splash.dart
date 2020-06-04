@@ -4,7 +4,6 @@ import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
-import 'package:janus_sip_client/src/communication/http.dart';
 import 'package:janus_sip_client/src/information/dealer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,29 +58,6 @@ class _SplashWidgetState extends State<SplashWidget> {
       _failed = false;
       _isLoading = true;
     });
-
-    // get token from server request
-    Response response = await HTTPServer().getToken();
-    if (response == null) {
-      setState(() {
-        _isLoading = false;
-        _failed = true;
-      });
-      FlushbarHelper.createError(
-          title: "note: ",
-          message: "Please make sure you are connected. ",
-          duration: Duration(seconds: 3))
-        ..show(context);
-      return;
-    }
-
-    print("****************************************************");
-    print("DEBUG ::: (SUCCESS) TOKEN >>>" + response.toString());
-    print("****************************************************");
-
-    // casting and storing information to local storage
-    final parsed = response.data;
-    await _preferences.setString('token', parsed['token'].toString());
 
     Timer(Duration(seconds: 7), () {
       // check person has ever registered before

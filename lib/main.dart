@@ -6,8 +6,7 @@ import 'src/views/callregisterbasic.dart';
 import 'src/views/callhomebasic.dart';
 import 'src/views/callscreen.dart';
 import 'src/views/dialpad.dart';
-import 'src/views/register.dart';
-import 'src/views/home.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -26,14 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/splash',
       routes: {
-        // '/': (context) => DialPadWidget(
-        //       // define connection information of server
-        //       channel: IOWebSocketChannel.connect('ws://erp.durihub.co.zw:8188',
-        //           protocols: ['janus-protocol']),
-        //     ),
         '/splash': (context) => SplashWidget(),
-        // '/register': (context) => RegisterWidget(),
-        // '/home': (context) => HomeWidget(),
         '/call': (context) => CallScreenWidget(),
         '/test': (context) => CallInputWidget(),
         '/local': (context) => CallSimpleRegisterWidget(),
