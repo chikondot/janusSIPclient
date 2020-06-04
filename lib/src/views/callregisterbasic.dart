@@ -36,16 +36,17 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
   _saveSettings() async {
     await _preferences.setString('contact', _username.text);
     await _preferences.setString(
-        'sip_uri', "sip:${_username.text}@talk.ai.co.zw");
+        'sip_uri', "sip:${_username.text}@${_domain.text}");
     await _preferences.setString('display_name', _username.text);
     await _preferences.setString('password', _password.text);
     await _preferences.setString('hash', _hashPassword);
+    await _preferences.setString('domain', _domain.text);
     await _preferences.setBool('loggedIn', true);
   }
 
   _getHash(TextEditingController _controller) {
     if (_controller.text != null) {
-      String input = "${_username.text}:${Dealer.domain}:${_controller.text}";
+      String input = "${_username.text}:${_domain.text}:${_controller.text}";
       return md5.convert(utf8.encode(input)).toString();
     }
     throw "DEBUG ::: ERROR >>> NO HASH FOR PASSWORD";
@@ -85,10 +86,6 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
     // naviagte to new page and save information
     Navigator.pushNamed(context, '/test');
   }
-
-  // *************************************************************
-  // *********** WIDGETS AS FUNCTIONS ****************************
-  // *************************************************************
 
   // field for inputing phone number detail
   Widget phoneField() => new Container(
@@ -135,6 +132,29 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
           validator: (value) {
             if (value.isEmpty) {
               return 'Please enter password';
+            }
+            return null;
+          },
+          keyboardType: TextInputType.text,
+          onSaved: (String value) {},
+        ),
+      );
+
+  Widget domainField() => new Container(
+        child: TextFormField(
+          maxLines: 1,
+          controller: _domain,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(20.0, 0.0, 7.0, 10.0),
+            hintText: "Enter Domain: ",
+            labelText: "Domain: ",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter domain';
             }
             return null;
           },
@@ -223,6 +243,8 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
                             )),
                         SizedBox(height: 70.0),
                         phoneField(),
+                        SizedBox(height: 10.0),
+                        domainField(),
                         SizedBox(height: 10.0),
                         passwordField(),
                         SizedBox(

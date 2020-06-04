@@ -138,9 +138,9 @@ class _DialPadWidget extends State<DialPadWidget> {
                         "authuser": "username",
                         "display_name": "username",
                         "ha1_secret": "md5ha1_password",
-                        "proxy": "sip:talk.ai.co.zw:5060",
+                        "proxy": "sip:domain:5060",
                         "request": "register",
-                        "username": "sip:username@talk.ai.co.zw"
+                        "username": "sip:username@domain"
                       },
                       "handle_id": _message['data']['id'],
                       "janus": "message",
@@ -176,7 +176,7 @@ class _DialPadWidget extends State<DialPadWidget> {
                       final _call = {
                         "body": {
                           "request": "call",
-                          "uri": "sip:callee@talk.ai.co.zw"
+                          "uri": "sip:callee@domain"
                         },
                         "handle_id": _handleID,
                         "janus": "message",

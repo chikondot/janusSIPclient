@@ -1,6 +1,6 @@
 # Maswerasei
 
-A new Flutter project.
+A websocket client in flutter making use of Janus SIP plugin
 
 ## Getting Started
 

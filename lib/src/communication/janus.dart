@@ -6,7 +6,7 @@ import 'package:flutter_webrtc/webrtc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
-// JanusCommunication j_sockets = new JanusCommunication();
+// set global variable
 Janus janus = new Janus();
 
 SharedPreferences _preferences;
@@ -123,7 +123,6 @@ class Janus {
   send(Object message) {
     if (_channel != null) {
       if (_channel.sink != null) {
-        print("DEBUG ::: SENDING JANUS MESSAGE >>> $message");
         _channel.sink.add(json.encode(message));
       }
     }
@@ -154,7 +153,7 @@ class Janus {
               "authuser": "${_preferences.getString('contact')}",
               "display_name": "${_preferences.getString('display_name')}",
               "ha1_secret": "${_preferences.getString('hash')}",
-              "proxy": "sip:talk.ai.co.zw:5060",
+              "proxy": "sip:${_preferences.getString('domain')}:5060",
               "request": "register",
               "username": "${_preferences.getString('sip_uri')}"
             },
@@ -174,7 +173,6 @@ class Janus {
         if (_message['plugindata']['data']['error'] != null) {
           print(
               "EVENT ERROR >>> ${_message['plugindata']['data']['error']} >>> ${_message['plugindata']['data']['error_code']}");
-          print("PARSED MESSAGE >> $_message");
 
           break;
         }
@@ -191,7 +189,7 @@ class Janus {
               "body": {
                 "request": "call",
                 "uri":
-                    "sip:${_preferences.getString('destination')}@talk.ai.co.zw"
+                    "sip:${_preferences.getString('destination')}@${_preferences.getString('domain')}"
               },
               "handle_id": _handleID,
               "janus": "message",
@@ -263,7 +261,7 @@ class Janus {
       case 'slowlink':
         print("SLOWLINK >>> ");
 
-// TODO : tell user that internet is not performing well
+        // TODO : tell user that internet is not performing well
         break;
       case 'timeout':
         print("TIMEOUT >>> CLOSING(); ");
@@ -358,8 +356,7 @@ class Janus {
       _pc.onIceGatheringState = (state) async {
         if (state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
           print('DEBUG ::: RTCIceGatheringStateComplete');
-          RTCSessionDescription sdp = await _pc.getLocalDescription();
-          // this.send(sdp.sdp);
+          await _pc.getLocalDescription();
         }
       };
       _pc.addStream(_stream);
@@ -376,7 +373,6 @@ class Janus {
 
   _loadSettings() async {
     _preferences = await SharedPreferences.getInstance();
-    print("DEBUG ::: LOAD SETTINGS >>> $_preferences");
   }
 
   _generateID(int len) {

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class Dealer {
   // basic dealer information
   static String get name => "maswerasei";
-  static String get domain => "talk.ai.co.zw";
 
   // dealer color schema
   static Color get mainColor => Color(0xff6b406b);

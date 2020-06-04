@@ -37,7 +37,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
     _saveSettings();
   }
 
-  Widget _handleCall(BuildContext buildContext) {
+  _handleCall(BuildContext buildContext) {
     var dest = _destination.text;
     if (dest == null || dest.isEmpty) {
       showDialog<Null>(
@@ -288,7 +288,9 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                 child: new FloatingActionButton(
                   heroTag: "voice_call",
                   backgroundColor: Colors.green,
-                  onPressed: () => _handleCall(context),
+                  onPressed: () {
+                    _handleCall(context);
+                  },
                   tooltip: 'Dial',
                   mini: false,
                   shape: RoundedRectangleBorder(
