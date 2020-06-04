@@ -109,34 +109,6 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                 color: Color(0xff6b406b),
               ),
               title: Text(
-                'Recharge',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w300,
-                  color: Color(0xff6b406b),
-                ),
-              ),
-              onTap: () {
-                AlertDialog(
-                  title: Text("TO IMPLEMENT"),
-                  content: Text('BE PATIENT'),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.account_balance_wallet,
-                color: Color(0xff6b406b),
-              ),
-              title: Text(
                 'Account',
                 style: TextStyle(
                   fontSize: 20.0,
