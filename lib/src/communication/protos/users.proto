@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package users;
+option go_package = "github.com/chikondot/momari/users/userspb";
+
+// Status of User
+enum UserStatus {
+  SUSPENDED = 0;
+  UNSUBSCRIBED = 1;
+  SUBSCRIBED = 2;
+}
+
+// TODO : yet to be implemented
+message Balance {
+  string currency = 1;
+  double amount = 2;
+}
+
+// User dependent on another user
+message Beneficiaries {
+  string user = 1; // _id of user under beneficiaries category
+}
+
+// Additional information for user definition
+message Additional {
+  string identity = 1;       // national identification number
+  string nationality = 2;    // nationality
+  string dob = 3;            // date of birth
+  string gender = 4;         // gender
+  string banking = 5;        // personal banking information
+  string occupation = 6;     // job occupation
+  string employer = 7;       // place of employment
+  string employerAdress = 8; // address of employment
+  UserStatus status = 9;     // current status oof user
+  repeated Beneficiaries beneficiaries = 10;
+}
+
+// Account definition for balance manipulation
+message Account {
+  string _id = 1;      // _id for account actions
+  double balance = 2;   // balance value to perform changes on
+  string modified = 3; // datetime of last manipulation
+}
+
+// User schema definition
+message User {
+  // using objectID from mongo as unqiue identifier
+  string username = 1; // format user@provider
+  string contact = 2;  // contact information
+  string email = 3;    // email address
+  string address = 4;  // user address
+  string domain = 5;
+  string password = 6;
+  double balance = 7; // divide to be determined by currency TODO
+  int64 reference = 8;
+  Additional additional = 9; // extra information for specific use
+  string created = 997;      // date created
+  string modified = 998;     // last time account was modified
+  string verification = 999; // processing of verification code
+}
+
+// Verification of User
+message verifyUser { string contact = 1; }
+
+// Login User
+message loginUser {
+  string username = 1;
+  string domain = 2;
+  string password = 3;
+}
+
+// Create User
+message createUser { User user = 1; }
+
+// Display || Remove || List User(s)
+message infoUser { string username = 1; string domain = 2; }
+
+// Update User
+message updateUser {
+  string username = 1;
+  string contact = 2;
+  string email = 3;
+  string address = 4;
+  string password = 5;
+  string domain = 6;
+  Additional additional = 7;
+}
+
+// User request response
+message detailsUser {
+  string result = 1;   // message showing success | failed
+  string _id = 2;      // set objectID for referencing
+  string username = 3; // set username for query
+  string contact = 4;  // set contact for payments
+  string email = 5;    // set email for payments
+  string address = 6;  // set address for delivery
+}
+
+// Add Beneficiaries
+message addBeneiciary {
+  string username = 1;
+  Beneficiaries beneiciary = 2;
+}
+
+// User service
+service userService {
+  rpc LoginUser(loginUser) returns (detailsUser);
+  rpc VerifyUser(verifyUser) returns (detailsUser);
+  rpc CreateUser(createUser) returns (detailsUser);
+  rpc RemoveUser(infoUser) returns (detailsUser);
+  rpc UpdateUser(updateUser) returns (detailsUser);
+  rpc DisplayUser(infoUser) returns (User);
+  rpc ListUsers(infoUser) returns (stream User);
+  rpc GetBalance(infoUser) returns (Account);
+  rpc UpdateBalance(Account) returns (detailsUser);
+  rpc PasswordReset(updateUser) returns (detailsUser);
+  rpc SetMerchant(updateUser) returns (detailsUser);
+  rpc AddBeneficiary(addBeneiciary) returns (detailsUser);
+}
