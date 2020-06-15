@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -62,7 +63,7 @@ class Janus {
 
     try {
       /// connect
-      _channel = new IOWebSocketChannel.connect('ws://erp.durihub.co.zw:8188',
+      _channel = new IOWebSocketChannel.connect('ws://localhost:8188',
           protocols: ['janus-protocol']);
       _onConnected = true;
 
@@ -70,6 +71,7 @@ class Janus {
         _loadSettings();
         _sdpOffer();
         _transactionID = _generateID(12);
+        _keepAlive();
       }
 
       /// listen for events
@@ -266,7 +268,12 @@ class Janus {
       case 'timeout':
         print("TIMEOUT >>> CLOSING(); ");
 
-        _kill();
+        _reset();
+        break;
+      case 'hangup':
+        print("HANGUP SESSION >>> CLOSING()");
+
+        _reset();
         break;
       case 'detached':
         print("DETACHED SESSION >>>");
@@ -292,7 +299,7 @@ class Janus {
   removeListener(Function callback) {
     print("DEBUG ::: JANUS REMOVE LISTENER CALLED");
     _listeners.remove(callback);
-    _kill();
+    _reset();
   }
 
   start() {
@@ -317,6 +324,7 @@ class Janus {
         _loadSettings();
         _sdpOffer();
         _transactionID = _generateID(12);
+        _keepAlive();
       }
 
       final String trans = _generateID(12);
@@ -386,5 +394,19 @@ class Janus {
       },
     );
     return String.fromCharCodes(units);
+  }
+
+  _keepAlive() {
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      if (!_onAnswered) {
+        timer.cancel();
+      }
+      final _keep = {
+        "janus": "keepalive",
+        "session_id": _sessionID,
+        "transaction": _transactionID
+      };
+      this.send(_keep);
+    });
   }
 }
