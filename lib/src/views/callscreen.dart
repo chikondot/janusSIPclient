@@ -81,12 +81,28 @@ class _CallScreenWidget extends State<CallScreenWidget> {
         });
 
     var basicActions = <Widget>[];
+    var advancedActions = <Widget>[];
 
     // hangup
     basicActions.add(_hangup);
 
-    var actionWidgets = <Widget>[];
+    // mute button
+    advancedActions.add(ActionButton(
+      title: _audioMuted ? 'unmute' : 'mute',
+      icon: _audioMuted ? Icons.mic_off : Icons.mic,
+      checked: _audioMuted,
+      onPressed: () => _muteAudio(),
+    ));
 
+    // speaker button
+    advancedActions.add(ActionButton(
+      title: _speakerOn ? 'speaker off' : 'speaker on',
+      icon: _speakerOn ? Icons.volume_off : Icons.volume_up,
+      checked: _speakerOn,
+      onPressed: () => _toggleSpeaker(),
+    ));
+
+    var actionWidgets = <Widget>[];
     actionWidgets.add(Padding(
         padding: const EdgeInsets.all(3),
         child: Row(
@@ -166,5 +182,35 @@ class _CallScreenWidget extends State<CallScreenWidget> {
     Timer(Duration(seconds: 5), () {
       Navigator.of(context).pop();
     });
+  }
+
+  bool _audioMuted = false;
+  bool _speakerOn = false;
+  bool _hold = false;
+  String _holdOriginator;
+
+  void _muteAudio() {
+    if (_audioMuted) {
+      // remove from mute
+
+    } else {
+      // mute audio
+    }
+  }
+
+  void _handleHold() {
+    if (_hold) {
+      // remove from hold
+    } else {
+      // put on hold
+    }
+  }
+
+  void _toggleSpeaker() {
+    if (janus.onLocalStream != null) {
+      // put pa loud
+      _speakerOn = !_speakerOn;
+      janus.onLocalStream.getAudioTracks()[0].enableSpeakerphone(_speakerOn);
+    }
   }
 }
