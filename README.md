@@ -7,7 +7,14 @@ A websocket client in flutter making use of [Janus](https://github.com/meetecho/
 - SIP over Websockets for signalling
 - Audio handled by ([flutter-webrtc](https://github.com/cloudwebrtc/flutter-webrtc))
 - Tested with OpenSIPS, Freeswitch.
-- Should also work with Kamalio and Asterisk (TODO) 
+- Should also work with Kamalio and Asterisk (TODO)
+
+## Project Configuration
+- change all instances of the following to 
+    1. connect to janus gateway ([janus.dart](https://github.com/chikondot/maswerasei/blob/master/lib/src/communication/janus.dart))
+    ```
+    _channel = new IOWebSocketChannel.connect('ws://localhost:8188', protocols: ['janus-protocol']);
+    ```
 
 ## Setup and Installation
 - ensure that you have flutter installed and and emulator to test
@@ -34,7 +41,7 @@ flutter run
 
 ## Supported and Tested Platform
 - [X] iOS && Android (Mobile)
-- [] Chrome, macOS, Firefox (Web)
+- [ ] Chrome, macOS, Firefox (Web)
 
 ## License
-maswerasei is released under the [MIT license](https://github.com/chikondot/masweraei/blob/master/LICENSE).
+maswerasei is released under the [MIT license](https://github.com/chikondot/maswerasei/blob/master/LICENSE).
