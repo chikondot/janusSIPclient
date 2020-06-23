@@ -39,6 +39,11 @@ flutter run
 
 ![Image of Homepage](https://github.com/chikondot/maswerasei/blob/master/images/homepage.png)
 
+- input :
+    username : account information of SIP register server
+    domain: proxy server ip/domain
+    password: password for authentication (HA1 currently implemented)
+
 ## Supported and Tested Platform
 - [X] iOS && Android (Mobile)
 - [ ] Chrome, macOS, Firefox (Web)
