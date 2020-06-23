@@ -9,11 +9,32 @@ A websocket client in flutter making use of [Janus](https://github.com/meetecho/
 - Tested with OpenSIPS, Freeswitch.
 - Should also work with Kamalio and Asterisk (TODO) 
 
+## Setup and Installation
+- ensure that you have flutter installed and and emulator to test
+- verfiy everything is ok
+```
+flutter doctor
+```
+- get project
+```
+git clone https://github.com/chikondot/maswerasei.git
+cd maswerasei
+```
+- build/run project
+```
+flutter clean
+flutter pub get
+flutter run
+```
+- application should have opened within emulator/device
+- please note to allow permissions for calling and audio
+- presented with sceen below:
+
+![Image of Homepage](https://github.com/chikondot/maswerasei/blob/master/images/homepage.png)
+
 ## Supported and Tested Platform
 - [X] iOS && Android (Mobile)
 - [] Chrome, macOS, Firefox (Web)
-
-## Quickstart
 
 ## License
 maswerasei is released under the [MIT license](https://github.com/chikondot/masweraei/blob/master/LICENSE).
