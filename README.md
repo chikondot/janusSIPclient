@@ -10,11 +10,12 @@ A websocket client in flutter making use of [Janus](https://github.com/meetecho/
 - Should also work with Kamalio and Asterisk (TODO)
 
 ## Project Configuration
-- change all instances of the following to 
-    1. connect to janus gateway ([janus.dart](https://github.com/chikondot/maswerasei/blob/master/lib/src/communication/janus.dart))
+- change all instances of the following to: 
+     - connect to janus gateway ([janus.dart](https://github.com/chikondot/maswerasei/blob/master/lib/src/communication/janus.dart))
     ```
     _channel = new IOWebSocketChannel.connect('ws://localhost:8188', protocols: ['janus-protocol']);
     ```
+     - change localhost to janus server IP
 
 ## Setup and Installation
 - ensure that you have flutter installed and and emulator to test
