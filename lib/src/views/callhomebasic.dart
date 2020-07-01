@@ -38,18 +38,19 @@ class CallInputWidgetSate extends State<CallInputWidget> {
   }
 
   _handleCall(BuildContext buildContext) {
-    var dest = _destination.text;
-    if (dest == null || dest.isEmpty) {
+    // check ::: if destination information has been set
+    if (_destination.text == null || _destination.text.isEmpty) {
       showDialog<Null>(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
+          // show ::: dialog if no destination
           return AlertDialog(
             title: Text('Target is empty.'),
             content: Text('Please enter a number to dail!'),
             actions: <Widget>[
               FlatButton(
-                child: Text('Ok'),
+                child: Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -60,8 +61,9 @@ class CallInputWidgetSate extends State<CallInputWidget> {
       );
       return null;
     }
+    // set ::: call destination and go to calling screen
     this.setState(() {});
-    _preferences.setString('destination', dest);
+    _preferences.setString('destination', _destination.text);
     Navigator.pushNamed(context, '/call');
   }
 
@@ -69,6 +71,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
     var text = _destination.text;
     if (text.isNotEmpty) {
       this.setState(() {
+        // check ::: remove characters or all from text
         text = deleteAll ? '' : text.substring(0, text.length - 1);
         _destination.text = text;
       });
@@ -127,6 +130,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
   }
 
   Widget _drawerHeader() {
+    // check ::: is account information set
     if (_account == null) _account = "Please sign in";
 
     return DrawerHeader(

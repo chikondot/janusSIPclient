@@ -15,7 +15,6 @@ class _CallScreenWidget extends State<CallScreenWidget> {
   void initState() {
     super.initState();
     _loadSettings();
-    _startTimer();
     janus.start();
   }
 
@@ -26,7 +25,11 @@ class _CallScreenWidget extends State<CallScreenWidget> {
   }
 
   Widget _buildContent() {
-    if (_callStatus == null) _callStatus = "calling...";
+    // set ::: init calling states and information
+    if (_callStatus == null) {
+      _callStatus = "Calling";
+      _callStatusColor = Color(0xff6b406b);
+    }
     var stackWidgets = <Widget>[];
     stackWidgets.addAll([
       Positioned(
@@ -46,12 +49,22 @@ class _CallScreenWidget extends State<CallScreenWidget> {
                       style: TextStyle(fontSize: 24, color: Colors.black54),
                     ))),
             Center(
-                child: Padding(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.play_circle_filled,
+                  color: _callStatusColor,
+                ),
+                Padding(
                     padding: const EdgeInsets.all(6),
                     child: Text(
                       '$_callStatus',
                       style: TextStyle(fontSize: 18, color: Colors.black54),
-                    ))),
+                    ))
+              ],
+            )),
             Center(
                 child: Padding(
                     padding: const EdgeInsets.all(6),
@@ -133,6 +146,7 @@ class _CallScreenWidget extends State<CallScreenWidget> {
   SharedPreferences _preferences;
   String _destination;
   String _callStatus;
+  Color _callStatusColor;
 
   _onData(message) {
     print("DEBUG ::: GOT MESSAGE (CALL SCREEN ) >>> $message");
@@ -161,13 +175,15 @@ class _CallScreenWidget extends State<CallScreenWidget> {
               .join(':');
 
           if (!janus.status) {
-            print("DEBUG ::: JANUS NOW FALSE >>> ${janus.status}");
             _backToDialPad();
           } else {
             if (janus.callStatus && !janus.callAnswerd) {
-              _callStatus = "ringing...";
+              _callStatus = "Ringing";
+              _callStatusColor = Colors.amber;
             } else if (janus.callAnswerd) {
-              _callStatus = "connected!";
+              _callStatus = "Connected";
+              _callStatusColor = Colors.green;
+              _startTimer();
             }
           }
         });

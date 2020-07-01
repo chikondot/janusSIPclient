@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
-import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';

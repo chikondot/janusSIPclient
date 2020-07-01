@@ -28,7 +28,6 @@ class _DialPadWidget extends State<DialPadWidget> {
   RTCPeerConnection _pc;
   dynamic onLocalStream;
   dynamic onRemoteStream;
-  dynamic _sdp;
 
   Map<String, dynamic> configuration = {
     'iceServers': [
@@ -64,20 +63,6 @@ class _DialPadWidget extends State<DialPadWidget> {
   String _timeLabel = '00:00';
   Future<String> _callState;
   Timer _timer;
-
-  // **********************************************************************
-  // _media() async {
-  //   try {
-  //     final pc = RTCPeerConnection(_sessionID.toString(), configuration);
-  //     final _offer = await pc.createOffer(_constraints);
-  //     await print("DEBUG ::: CREATED OFFER >>> $_offer");
-  //     return _offer;
-  //   } catch (e) {
-  //     print("DEBUG ::: GOT OFFER CREATION ERROR");
-  //     throw e;
-  //   }
-  // }
-  // **********************************************************************
 
   @override
   void initState() {
@@ -174,10 +159,7 @@ class _DialPadWidget extends State<DialPadWidget> {
                       print("PARSED MESSAGE >> $_message ::: $_description");
 
                       final _call = {
-                        "body": {
-                          "request": "call",
-                          "uri": "sip:callee@domain"
-                        },
+                        "body": {"request": "call", "uri": "sip:callee@domain"},
                         "handle_id": _handleID,
                         "janus": "message",
                         "session_id": _sessionID,
@@ -344,8 +326,7 @@ class _DialPadWidget extends State<DialPadWidget> {
       _pc = await createPeerConnection(configuration, _config);
       _pc.onIceGatheringState = (state) async {
         if (state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
-          print('DEBUG ::: RTCIceGatheringStateComplete'); // TODO : fix
-          RTCSessionDescription sdp = await _pc.getLocalDescription();
+          await _pc.getLocalDescription();
         }
       };
       _pc.addStream(_stream);

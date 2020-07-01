@@ -29,7 +29,6 @@ class Janus {
   _reset() {
     if (_channel != null) {
       if (_channel.sink != null) {
-        print("DEBUG ::: RESET WSS CONNECTION");
         _channel.sink.close();
         _onConnected = false;
         _onAnswered = false;
@@ -42,19 +41,6 @@ class Janus {
         _message = null;
       }
     }
-  }
-
-  _kill() {
-    _onConnected = false;
-    _onAnswered = false;
-    _onRinging = false;
-    _onRegister = false;
-    _onAttach = false;
-    _handleID = null;
-    _sessionID = null;
-    _transactionID = null;
-    _message = null;
-    _channel.sink.close();
   }
 
   Janus._internal() {
@@ -297,7 +283,6 @@ class Janus {
   }
 
   removeListener(Function callback) {
-    print("DEBUG ::: JANUS REMOVE LISTENER CALLED");
     _listeners.remove(callback);
     _reset();
   }
@@ -316,7 +301,7 @@ class Janus {
     _reset();
     try {
       /// connect
-      _channel = new IOWebSocketChannel.connect('ws://erp.durihub.co.zw:8188',
+      _channel = new IOWebSocketChannel.connect('ws://localhost:8188',
           protocols: ['janus-protocol']);
       _onConnected = true;
 
@@ -363,13 +348,11 @@ class Janus {
       _pc = await createPeerConnection(configuration, _config);
       _pc.onIceGatheringState = (state) async {
         if (state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
-          print('DEBUG ::: RTCIceGatheringStateComplete');
           await _pc.getLocalDescription();
         }
       };
       _pc.addStream(_stream);
       _description = await _pc.createOffer(_constraints);
-      print('DEBUG ::: SDP >>> createOffer');
       _pc.setLocalDescription(_description);
     }
   }

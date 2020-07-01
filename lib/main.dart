@@ -5,8 +5,6 @@ import 'src/views/splash.dart';
 import 'src/views/callregisterbasic.dart';
 import 'src/views/callhomebasic.dart';
 import 'src/views/callscreen.dart';
-import 'src/views/dialpad.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -17,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Janus SIP',
+      title: 'Maswerasei',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
