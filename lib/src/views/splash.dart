@@ -36,19 +36,12 @@ class _SplashWidgetState extends State<SplashWidget> {
     super.dispose();
   }
 
-  Future _getPermissions() async {
-    // You can request multiple permissions at once.
-    Map<Permission, PermissionStatus> statuses = await [
+  Future _getPermissions() async => await [
       Permission.contacts,
       Permission.microphone,
       Permission.notification,
       Permission.camera,
     ].request();
-
-    print("*******************************************");
-    print("DEBUG :::: PERMISSIONS >>> $statuses");
-    print("*******************************************");
-  }
 
   // get authorization token for login
   Future _login() async {

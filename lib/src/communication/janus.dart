@@ -270,6 +270,23 @@ class Janus {
 
         _reset();
         break;
+      case "incomingcall":
+        _sdpIncomingAnswer(_message['jsep']['sdp'], _message['jsep']['type']);
+        final answer = {
+          "body": {
+            "request": "accept",
+            "uri":
+                "sip:${_preferences.getString('destination')}@${_preferences.getString('domain')}"
+          },
+          "janus": "message",
+          "handle_id": _handleID,
+          "session_id": _sessionID,
+          "transaction": "$_transactionID",
+          "jsep": {"sdp": "${_description.sdp}", "type": "answer"},
+        };
+        this.send(answer);
+
+        break;
       default:
         print("PARSED MESSAGE >> $_message");
         break;
@@ -360,6 +377,23 @@ class Janus {
   _sdpAnswer(data) async {
     if (_pc == null) return;
     _pc.setRemoteDescription(new RTCSessionDescription(data, 'answer'));
+  }
+
+  _sdpIncomingAnswer(String sdp, String type) async {
+    if (_channel != null) {
+      final Map<String, dynamic> mediaConstraints = {
+        "audio": true,
+        "video": null
+      };
+      _stream = await navigator.getUserMedia(mediaConstraints);
+      if (this.onLocalStream != null) this.onLocalStream(_stream);
+      _pc = await createPeerConnection(configuration, _config);
+      _pc.setRemoteDescription(RTCSessionDescription(sdp, type));
+      _pc.addStream(_stream);
+      _description = await _pc.createAnswer(_constraints);
+
+      _pc.setLocalDescription(_description);
+    }
   }
 
   _loadSettings() async {

@@ -229,8 +229,12 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                   color: Colors.grey,
                   child: new InkWell(
                     onTap: () {
-                      if (_destination.text == "Enter phone number:")
+                      if (_destination.text == "Enter phone number:") {
                         _destination.text = "";
+                        this.setState(() {});
+                      }
+
+                      // TODO ::: fix cursor issue
                       _destination.text += numbers[index];
                     },
                     onLongPress: () {
