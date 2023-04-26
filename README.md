@@ -1,4 +1,4 @@
-# Maswerasei
+# Janus SIP Client
 
 A websocket client in flutter making use of [Janus](https://github.com/meetecho/janus-gateway) [SIP plugin](https://janus.conf.meetecho.com/docs/sip.html)
 
@@ -25,7 +25,7 @@ flutter doctor
 ```
 - get project
 ```
-git clone https://github.com/chikondot/maswerasei.git
+git clone https://github.com/chikondot/janusSIPclient.git
 cd maswerasei
 ```
 - build/run project
