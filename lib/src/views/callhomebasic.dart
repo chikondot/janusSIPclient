@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:JanusSIPClient/src/utilities/ClientStrings.dart';
+import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
 import 'widgets/noKBEt.dart';
 
 class CallInputWidget extends StatefulWidget {
@@ -11,18 +13,18 @@ class CallInputWidget extends StatefulWidget {
 class CallInputWidgetSate extends State<CallInputWidget> {
   final TextEditingController _destination = new TextEditingController();
 
-  SharedPreferences _preferences;
-  String _account;
+  SharedPreferences? _preferences;
+  String _account = "";
   _loadSettings() async {
     _preferences = await SharedPreferences.getInstance();
-    if (_preferences.containsKey('contact')) {
-      _account = _preferences.getString('contact');
+    if (_preferences!.containsKey('contact')) {
+      _account = _preferences!.getString('contact')!;
     }
     this.setState(() {});
   }
 
   _saveSettings() async {
-    await _preferences.setString('destination', _destination.text);
+    await _preferences!.setString('destination', _destination.text);
   }
 
   @override
@@ -63,7 +65,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
     }
     // set ::: call destination and go to calling screen
     this.setState(() {});
-    _preferences.setString('destination', _destination.text);
+    _preferences!.setString('destination', _destination.text);
     Navigator.pushNamed(context, '/call');
   }
 
@@ -82,22 +84,10 @@ class CallInputWidgetSate extends State<CallInputWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text("Home"),
-          backgroundColor: Color(0xff6b406b),
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(right: 10.0),
-                child: Center(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                      GestureDetector(
-                        child: Text("Balance: \$0,00",
-                            style: TextStyle(color: Colors.white)),
-                        onTap: () {},
-                      ),
-                    ])))
-          ]),
+          title: Text(Strings.applicationName),
+          backgroundColor: Assets.primaryColor,
+          actions: <Widget>[]
+      ),
       body: SafeArea(child: dialPad(context)),
       drawer: Drawer(
         child: ListView(
@@ -108,15 +98,15 @@ class CallInputWidgetSate extends State<CallInputWidget> {
             ),
             ListTile(
               leading: Icon(
-                Icons.account_balance_wallet,
-                color: Color(0xff6b406b),
+                Icons.exit_to_app,
+                color: Assets.primaryColor,
               ),
               title: Text(
-                'Account',
+                'LogOut',
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w300,
-                  color: Color(0xff6b406b),
+                  color: Assets.primaryColor,
                 ),
               ),
               onTap: () {
@@ -137,7 +127,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: Color(0xff6b406b),
+        color: Assets.primaryColor,
       ),
       child: Stack(
         children: <Widget>[
@@ -147,7 +137,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
             child: new Icon(
               Icons.account_circle,
               size: 28.0,
-              color: Colors.white,
+              color: Assets.whiteColor,
             ),
           ),
           Positioned(
@@ -156,7 +146,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
             child: Text(
               "$_account",
               style: TextStyle(
-                  color: Colors.white,
+                  color: Assets.whiteColor,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w500),
             ),
@@ -204,7 +194,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
           padding: EdgeInsets.only(left: 40.0, right: 40.0, bottom: 5.0),
           child: new NoKeyboardEditableText(
             controller: _destination,
-            style: TextStyle(fontSize: 30.0, color: Colors.black),
+            style: TextStyle(fontSize: 30.0, color: Assets.blackColor),
             cursorColor: Colors.transparent,
             selectionColor: Colors.transparent,
             autofocus: false,
@@ -278,14 +268,14 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                     ),
                   ),
                   elevation: 0.5,
-                  color: Colors.white,
+                  color: Assets.whiteColor,
                   child: new InkWell(
                     radius: 50.0,
                     child: new Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Icon(
                         Icons.video_call,
-                        color: Colors.white,
+                        color: Assets.whiteColor,
                       ),
                     ),
                   ),
@@ -295,7 +285,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                 // voice call button
                 child: new FloatingActionButton(
                   heroTag: "voice_call",
-                  backgroundColor: Colors.green,
+                  backgroundColor: Assets.greenColor,
                   onPressed: () {
                     _handleCall(context);
                   },
@@ -320,7 +310,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                     ),
                   ),
                   elevation: 0.5,
-                  color: Colors.redAccent,
+                  color: Assets.redColor,
                   child: new InkWell(
                     radius: 50.0,
                     onTap: () => _handleBackSpace(),
@@ -329,7 +319,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                       padding: EdgeInsets.all(10.0),
                       child: Icon(
                         Icons.backspace,
-                        color: Colors.white,
+                        color: Assets.whiteColor,
                       ),
                     ),
                   ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:janus_sip_client/src/communication/janus.dart';
+import 'package:JanusSIPClient/src/services/janus.dart';
+import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/action_button.dart';
@@ -28,7 +29,7 @@ class _CallScreenWidget extends State<CallScreenWidget> {
     // set ::: init calling states and information
     if (_callStatus == null) {
       _callStatus = "Calling";
-      _callStatusColor = Color(0xff6b406b);
+      _callStatusColor = Assets.primaryColor;
     }
     var stackWidgets = <Widget>[];
     stackWidgets.addAll([
@@ -46,7 +47,7 @@ class _CallScreenWidget extends State<CallScreenWidget> {
                     padding: const EdgeInsets.all(6),
                     child: Text(
                       ('$_destination'),
-                      style: TextStyle(fontSize: 24, color: Colors.black54),
+                      style: TextStyle(fontSize: 24, color: Assets.blackColor),
                     ))),
             Center(
                 child: Row(
@@ -61,7 +62,7 @@ class _CallScreenWidget extends State<CallScreenWidget> {
                     padding: const EdgeInsets.all(6),
                     child: Text(
                       '$_callStatus',
-                      style: TextStyle(fontSize: 18, color: Colors.black54),
+                      style: TextStyle(fontSize: 18, color:Assets.blackColor),
                     ))
               ],
             )),
@@ -69,7 +70,7 @@ class _CallScreenWidget extends State<CallScreenWidget> {
                 child: Padding(
                     padding: const EdgeInsets.all(6),
                     child: Text(_timeLabel,
-                        style: TextStyle(fontSize: 14, color: Colors.black54))))
+                        style: TextStyle(fontSize: 14, color: Assets.blackColor))))
           ],
         )),
       ),
@@ -84,10 +85,10 @@ class _CallScreenWidget extends State<CallScreenWidget> {
     var _hangup = ActionButton(
         title: "hangup",
         icon: Icons.call_end,
-        fillColor: Colors.red,
+        fillColor: Assets.redColor,
         onPressed: () {
           janus.hangup();
-          if (_timer != null) _timer.cancel();
+          if (_timer != null) _timer?.cancel();
           Timer(Duration(seconds: 2), () {
             Navigator.of(context).pop();
           });
@@ -140,13 +141,13 @@ class _CallScreenWidget extends State<CallScreenWidget> {
     );
   }
 
-  Timer _timer;
+  Timer? _timer;
   String _timeLabel = '00:00';
 
-  SharedPreferences _preferences;
-  String _destination;
-  String _callStatus;
-  Color _callStatusColor;
+  SharedPreferences? _preferences;
+  String _destination = "";
+  String _callStatus = "";
+  Color? _callStatusColor;
 
   _onData(message) {
     print("DEBUG ::: GOT MESSAGE (CALL SCREEN ) >>> $message");
@@ -160,7 +161,7 @@ class _CallScreenWidget extends State<CallScreenWidget> {
 
   _loadSettings() async {
     _preferences = await SharedPreferences.getInstance();
-    _destination = _preferences.getString('destination');
+    _destination = _preferences!.getString('destination')!;
     this.setState(() {});
   }
 
@@ -179,22 +180,22 @@ class _CallScreenWidget extends State<CallScreenWidget> {
           } else {
             if (janus.callStatus && !janus.callAnswerd) {
               _callStatus = "Ringing";
-              _callStatusColor = Colors.amber;
+              _callStatusColor = Assets.amberColor;
             } else if (janus.callAnswerd) {
               _callStatus = "Connected";
-              _callStatusColor = Colors.green;
+              _callStatusColor = Assets.greenColor;
               _startTimer();
             }
           }
         });
       } else {
-        _timer.cancel();
+        _timer?.cancel();
       }
     });
   }
 
   void _backToDialPad() {
-    _timer.cancel();
+    _timer?.cancel();
     Timer(Duration(seconds: 5), () {
       Navigator.of(context).pop();
     });
@@ -203,7 +204,7 @@ class _CallScreenWidget extends State<CallScreenWidget> {
   bool _audioMuted = false;
   bool _speakerOn = false;
   bool _hold = false;
-  String _holdOriginator;
+  String _holdOriginator = "";
 
   void _muteAudio() {
     if (_audioMuted) {

@@ -10,7 +10,7 @@ import 'package:web_socket_channel/io.dart';
 // set global variable
 Janus janus = new Janus();
 
-SharedPreferences _preferences;
+SharedPreferences? _preferences;
 
 class Janus {
   static final Janus _janus = new Janus._internal();
@@ -19,7 +19,7 @@ class Janus {
     return _janus;
   }
 
-  IOWebSocketChannel _channel;
+  IOWebSocketChannel? _channel = null;
   bool _onConnected = false;
 
   bool get status => _onConnected;
@@ -28,17 +28,17 @@ class Janus {
 
   _reset() {
     if (_channel != null) {
-      if (_channel.sink != null) {
-        _channel.sink.close();
+      if (_channel?.sink != null) {
+        _channel?.sink.close();
         _onConnected = false;
         _onAnswered = false;
         _onRinging = false;
         _onRegister = false;
         _onAttach = false;
-        _handleID = null;
-        _sessionID = null;
-        _transactionID = null;
-        _message = null;
+        _handleID = 0;
+        _sessionID = 0;
+        _transactionID = "";
+        // _message = null;
       }
     }
   }
@@ -61,22 +61,22 @@ class Janus {
       }
 
       /// listen for events
-      _channel.stream.listen(onMessage);
+      _channel?.stream.listen(onMessage);
     } catch (e) {
       throw e;
     }
   }
 
   // JANUS variables for returned information
-  Map<String, dynamic> _message;
-  String _transactionID;
-  int _sessionID;
-  int _handleID;
+  Map<String, dynamic> _message = {"key": "value"};
+  String _transactionID = "";
+  int _sessionID = 0;
+  int _handleID = 0;
 
   // SDP variables used.
-  RTCSessionDescription _description;
-  MediaStream _stream;
-  RTCPeerConnection _pc;
+  RTCSessionDescription? _description = null;
+  MediaStream? _stream = null;
+  RTCPeerConnection? _pc = null;
   dynamic onLocalStream;
   dynamic onRemoteStream;
 
@@ -110,8 +110,8 @@ class Janus {
 
   send(Object message) {
     if (_channel != null) {
-      if (_channel.sink != null) {
-        _channel.sink.add(json.encode(message));
+      if (_channel?.sink != null) {
+        _channel?.sink.add(json.encode(message));
       }
     }
   }
@@ -138,12 +138,12 @@ class Janus {
         } else if (!_onRegister && _onAttach) {
           final _register = {
             "body": {
-              "authuser": "${_preferences.getString('contact')}",
-              "display_name": "${_preferences.getString('display_name')}",
-              "ha1_secret": "${_preferences.getString('hash')}",
-              "proxy": "sip:${_preferences.getString('domain')}:5060",
+              "authuser": "${_preferences?.getString('contact')}",
+              "display_name": "${_preferences?.getString('display_name')}",
+              "ha1_secret": "${_preferences?.getString('hash')}",
+              "proxy": "sip:${_preferences?.getString('domain')}:5060",
               "request": "register",
-              "username": "${_preferences.getString('sip_uri')}"
+              "username": "${_preferences?.getString('sip_uri')}"
             },
             "handle_id": _message['data']['id'],
             "janus": "message",
@@ -177,15 +177,15 @@ class Janus {
               "body": {
                 "request": "call",
                 "uri":
-                    "sip:${_preferences.getString('destination')}@${_preferences.getString('domain')}"
+                    "sip:${_preferences?.getString('destination')}@${_preferences?.getString('domain')}"
               },
               "handle_id": _handleID,
               "janus": "message",
               "session_id": _sessionID,
               "transaction": "$_transactionID",
               "jsep": {
-                "sdp": "${_description.sdp}",
-                "type": "${_description.type}"
+                "sdp": "${_description?.sdp}",
+                "type": "${_description?.type}"
               },
             };
             this.send(_call);
@@ -276,13 +276,13 @@ class Janus {
           "body": {
             "request": "accept",
             "uri":
-                "sip:${_preferences.getString('destination')}@${_preferences.getString('domain')}"
+                "sip:${_preferences?.getString('destination')}@${_preferences?.getString('domain')}"
           },
           "janus": "message",
           "handle_id": _handleID,
           "session_id": _sessionID,
           "transaction": "$_transactionID",
-          "jsep": {"sdp": "${_description.sdp}", "type": "answer"},
+          "jsep": {"sdp": "${_description?.sdp}", "type": "answer"},
         };
         this.send(answer);
 
@@ -306,7 +306,7 @@ class Janus {
 
   start() {
     if (_channel != null) {
-      if (_channel.sink != null && _onConnected) {
+      if (_channel?.sink != null && _onConnected) {
         final String trans = _generateID(12);
         final _create = {'janus': 'create', 'transaction': '$trans'};
         send(_create);
@@ -334,7 +334,7 @@ class Janus {
       send(_create);
 
       /// listen for events
-      _channel.stream.listen(onMessage);
+      _channel?.stream.listen(onMessage);
     } catch (e) {
       throw e;
     }
@@ -363,20 +363,20 @@ class Janus {
       _stream = await navigator.getUserMedia(mediaConstraints);
       if (this.onLocalStream != null) this.onLocalStream(_stream);
       _pc = await createPeerConnection(configuration, _config);
-      _pc.onIceGatheringState = (state) async {
+      _pc?.onIceGatheringState = (state) async {
         if (state == RTCIceGatheringState.RTCIceGatheringStateComplete) {
-          await _pc.getLocalDescription();
+          await _pc?.getLocalDescription();
         }
       };
-      _pc.addStream(_stream);
-      _description = await _pc.createOffer(_constraints);
-      _pc.setLocalDescription(_description);
+      _pc?.addStream(_stream!);
+      _description = await _pc?.createOffer(_constraints);
+      _pc?.setLocalDescription(_description!);
     }
   }
 
   _sdpAnswer(data) async {
     if (_pc == null) return;
-    _pc.setRemoteDescription(new RTCSessionDescription(data, 'answer'));
+    _pc?.setRemoteDescription(new RTCSessionDescription(data, 'answer'));
   }
 
   _sdpIncomingAnswer(String sdp, String type) async {
@@ -388,11 +388,11 @@ class Janus {
       _stream = await navigator.getUserMedia(mediaConstraints);
       if (this.onLocalStream != null) this.onLocalStream(_stream);
       _pc = await createPeerConnection(configuration, _config);
-      _pc.setRemoteDescription(RTCSessionDescription(sdp, type));
-      _pc.addStream(_stream);
-      _description = await _pc.createAnswer(_constraints);
+      _pc?.setRemoteDescription(RTCSessionDescription(sdp, type));
+      _pc?.addStream(_stream!);
+      _description = await _pc?.createAnswer(_constraints);
 
-      _pc.setLocalDescription(_description);
+      _pc?.setLocalDescription(_description!);
     }
   }
 

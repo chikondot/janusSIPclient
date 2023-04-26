@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:janus_sip_client/src/information/dealer.dart';
+import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CallSimpleRegisterWidget extends StatefulWidget {
@@ -12,10 +12,12 @@ class CallSimpleRegisterWidget extends StatefulWidget {
       CallSimpleRegisterWidgetState();
 }
 
-class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
+class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget>
+    with ReuseRegisterWidgets {
   // variable definitions
   final formKey = GlobalKey<FormState>();
 
+  // --- Deprecated section
   final TextEditingController _username = new TextEditingController();
   final TextEditingController _password = new TextEditingController();
   final TextEditingController _domain = new TextEditingController();
@@ -23,9 +25,17 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
   bool running = false;
   bool isLoading = false;
 
-  SharedPreferences _preferences;
+  SharedPreferences? _preferences;
 
-  String _hashPassword;
+  String _hashPassword = "";
+
+  // --- Refactor section
+  final TextEditingController sipRegistrarField = new TextEditingController();
+  final TextEditingController sipIdentityField = new TextEditingController();
+  final TextEditingController sipUsernameField = new TextEditingController();
+  final TextEditingController sipPasswordField = new TextEditingController();
+
+  // _preferences: should be moved to a singelton for SingleResponsibility and reuse
 
   // get information from storage of user settings (exec at init of page)
   void _loadSettings() async {
@@ -34,14 +44,14 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
   }
 
   _saveSettings() async {
-    await _preferences.setString('contact', _username.text);
-    await _preferences.setString(
+    await _preferences?.setString('contact', _username.text);
+    await _preferences?.setString(
         'sip_uri', "sip:${_username.text}@${_domain.text}");
-    await _preferences.setString('display_name', _username.text);
-    await _preferences.setString('password', _password.text);
-    await _preferences.setString('hash', _hashPassword);
-    await _preferences.setString('domain', _domain.text);
-    await _preferences.setBool('loggedIn', true);
+    await _preferences?.setString('display_name', _username.text);
+    await _preferences?.setString('password', _password.text);
+    await _preferences?.setString('hash', _hashPassword);
+    await _preferences?.setString('domain', _domain.text);
+    await _preferences?.setBool('loggedIn', true);
   }
 
   _getHash(TextEditingController _controller) {
@@ -87,92 +97,16 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
     Navigator.pushNamed(context, '/test');
   }
 
-  // field for inputing phone number detail
-  Widget phoneField() => new Container(
-        child: TextFormField(
-          maxLines: 1,
-          controller: _username,
-          decoration: InputDecoration(
-            hintText: "Enter username: ",
-            labelText: "Username: ",
-            contentPadding: EdgeInsets.fromLTRB(20.0, 14.0, 0.0, 20.0),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          validator: (value) {
-            if (value.isEmpty) {
-              // validation that non empty
-              return 'Please enter your phone number';
-            } else if (value.length < 6) {
-              // validation that numbers are correct
-              return 'Please enter a valid phone number';
-            }
-
-            return null;
-          },
-          keyboardType: TextInputType.phone,
-          onSaved: (String value) {},
-        ),
-      );
-
-  // field to init sms generation and input verification code
-  Widget passwordField() => new Container(
-        child: TextFormField(
-          maxLines: 1,
-          controller: _password,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.fromLTRB(20.0, 0.0, 7.0, 10.0),
-            hintText: "Enter Password: ",
-            labelText: "Password: ",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter password';
-            }
-            return null;
-          },
-          keyboardType: TextInputType.text,
-          onSaved: (String value) {},
-        ),
-      );
-
-  Widget domainField() => new Container(
-        child: TextFormField(
-          maxLines: 1,
-          controller: _domain,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.fromLTRB(20.0, 0.0, 7.0, 10.0),
-            hintText: "Enter Domain: ",
-            labelText: "Domain: ",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter domain';
-            }
-            return null;
-          },
-          keyboardType: TextInputType.text,
-          onSaved: (String value) {},
-        ),
-      );
-
   // define login button with information posted to create user
   Widget loginButon() => new Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(10.0),
-        color: Dealer.mainColor,
+        color: Assets.primaryColor,
         child: MaterialButton(
           minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           onPressed: () async {
-            if (formKey.currentState.validate()) {
+            if (formKey.currentState!.validate()) {
               _hashPassword = _getHash(_password);
               _saveSettings();
 
@@ -186,9 +120,9 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
             }
           },
           child: Text(
-            "Login",
+            "Register",
             style: TextStyle(
-              color: Colors.white,
+              color: Assets.whiteColor,
             ),
             textAlign: TextAlign.center,
           ),
@@ -220,7 +154,7 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
           child: Center(
             child: SingleChildScrollView(
               child: Container(
-                color: Colors.white,
+                color: Assets.whiteColor,
                 child: Padding(
                   padding: const EdgeInsets.all(36.0),
                   child: Form(
@@ -236,17 +170,19 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
                             child: new ClipRRect(
                               borderRadius: new BorderRadius.circular(8.0),
                               child: Image.asset(
-                                "${Dealer.splash}",
+                                "${Assets.splashScreenLogo}",
                                 height: 50,
                                 fit: BoxFit.cover,
                               ),
                             )),
                         SizedBox(height: 70.0),
-                        phoneField(),
+                        inputTextField(sipRegistrarField, RegisterType.registrar),
                         SizedBox(height: 10.0),
-                        domainField(),
+                        inputTextField(sipIdentityField, RegisterType.identity),
                         SizedBox(height: 10.0),
-                        passwordField(),
+                        inputTextField(sipUsernameField, RegisterType.username),
+                        SizedBox(height: 10.0),
+                        inputTextField(sipPasswordField, RegisterType.password),
                         SizedBox(
                           height: 5.0,
                         ),
@@ -270,5 +206,47 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
         ),
       ),
     );
+  }
+}
+
+enum RegisterType {
+  registrar("SIP Registrar"),
+  identity("SIP Identity"),
+  username("SIP Username"),
+  password("SIP Password");
+
+  const RegisterType(this.label);
+
+  final String label;
+}
+
+class ReuseRegisterWidgets {
+  // -- Refactor to make input field reusable
+  @override
+  Widget inputTextField(
+    TextEditingController inputController,
+    RegisterType inputType,
+  ) {
+    return new Container(
+      child: TextFormField(
+        controller: inputController,
+        keyboardType: TextInputType.text,
+        validator: validationCheck,
+        maxLines: 1,
+        decoration: InputDecoration(
+          hintText: "Enter ${inputType.label}:",
+          labelText: "${inputType.label}:",
+          contentPadding: EdgeInsets.fromLTRB(20.0, 14.0, 0.0, 20.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String? validationCheck(String? value) {
+    if (value != null) if (value.isEmpty) return 'Input value is empty or null';
+    return null;
   }
 }

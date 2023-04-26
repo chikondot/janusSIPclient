@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:janus_sip_client/src/information/dealer.dart';
+import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,7 +15,7 @@ class _SplashWidgetState extends State<SplashWidget> {
   bool _failed = false;
 
   // persistent storage
-  SharedPreferences _preferences;
+  SharedPreferences? _preferences;
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _SplashWidgetState extends State<SplashWidget> {
 
     Timer(Duration(seconds: 7), () {
       // check person has ever registered before
-      if (_preferences.containsKey('loggedIn')) {
+      if (_preferences!.containsKey('loggedIn')) {
         Navigator.pop(context);
         Navigator.pushNamed(context, '/test');
       } else {
@@ -81,7 +81,7 @@ class _SplashWidgetState extends State<SplashWidget> {
                   child: SizedBox(
                     height: 155.0,
                     child: Image.asset(
-                      "${Dealer.splash}",
+                      "${Assets.splashScreenLogo}",
                     ),
                   ),
                 ),

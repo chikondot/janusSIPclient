@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 
 class NoKeyboardEditableText extends EditableText {
   NoKeyboardEditableText(
-      {@required TextEditingController controller,
-      @required TextStyle style,
-      @required Color cursorColor,
+      {required TextEditingController controller,
+      required TextStyle style,
+      required Color cursorColor,
       bool autofocus = false,
-      Color selectionColor})
+      Color? selectionColor})
       : super(
           controller: controller,
           focusNode: NoKeyboardEditableTextFocusNode(),
