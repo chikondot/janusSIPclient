@@ -11,6 +11,6 @@ class Dealer {
   static Color get swatchColor => Color(0xffffcc00);
 
   // dealer images
-  static String get logo => "images/imaswerasei_icon.png";
+  static String get logo => "images/maswerasei_icon.png";
   static String get splash => "images/maswerasei_logo.png";
 }

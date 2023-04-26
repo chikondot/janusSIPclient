@@ -57,7 +57,7 @@ class _DialPadWidget extends State<DialPadWidget> {
   bool _onConnected = false;
 
   // TOREMOVE
-  List<Object> _show = new List<Object>();
+  List<Object> _show = <Object>[];
 
   // show time on call
   String _timeLabel = '00:00';

@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 import 'package:janus_sip_client/src/information/dealer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +14,7 @@ class _SplashWidgetState extends State<SplashWidget> {
   bool _isLoading = false;
   bool _failed = false;
 
-  // persistent storgae
+  // persistent storage
   SharedPreferences _preferences;
 
   @override
