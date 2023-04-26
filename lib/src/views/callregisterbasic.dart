@@ -62,7 +62,7 @@ class CallSimpleRegisterWidgetState extends State<CallSimpleRegisterWidget> {
           title: Text('$alertFieldName is empty'),
           content: Text('Please enter $alertFieldName!'),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();

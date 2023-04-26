@@ -41,5 +41,15 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow Contact Access For Details</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Allow Microphone Access For Calls</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Allow Camera Access For Calls</string>
 </dict>
 </plist>

@@ -93,7 +93,7 @@ class _SplashWidgetState extends State<SplashWidget> {
                       )
                     : Container(),
                 _failed
-                    ? OutlineButton(
+                    ? OutlinedButton(
                         onPressed: () {
                           _login();
                         },

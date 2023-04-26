@@ -49,7 +49,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
             title: Text('Target is empty.'),
             content: Text('Please enter a number to dail!'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
