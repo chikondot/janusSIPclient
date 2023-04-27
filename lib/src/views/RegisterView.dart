@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+
 import 'package:JanusSIPClient/src/utilities/ClientStrings.dart';
 import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
 import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
@@ -15,8 +14,6 @@ class RegisterViewWidgetState extends State<RegisterViewWidget>
     with RegisterReusableWidgets, ReusableAlert {
   final formKey = GlobalKey<FormState>();
 
-  bool screenLoading = false;
-
   final TextEditingController sipRegistrarField = new TextEditingController();
   final TextEditingController sipIdentityField = new TextEditingController();
   final TextEditingController sipUsernameField = new TextEditingController();
@@ -26,10 +23,11 @@ class RegisterViewWidgetState extends State<RegisterViewWidget>
 
   void persistViewInformation() async {
     Map<String, String> preferencesMap = {
-      "registrar": "",
-      "identity": "",
-      "username": "",
-      "password": "",
+      Strings.registrarPref: sipRegistrarField.text,
+      Strings.identityPref: sipIdentityField.text,
+      Strings.usernamePref: sipUsernameField.text,
+      Strings.passwordPref: sipPasswordField.text,
+      Strings.loginPref: "1"
     };
     Storage.setMultipleStrings(preferencesMap);
   }
@@ -45,12 +43,12 @@ class RegisterViewWidgetState extends State<RegisterViewWidget>
   }
 
   void handlePageNavigation() {
-    Navigator.pushNamed(context, '/test');
+    Navigator.pushNamed(context, '/home');
   }
 
-// *************************************************************
-// *********** MAIN BUILD FUNCTION *****************************
-// *************************************************************
+/// *************************************************************
+/// *********** MAIN BUILD FUNCTION *****************************
+/// *************************************************************
 
   @override
   initState() {
@@ -91,12 +89,6 @@ class RegisterViewWidgetState extends State<RegisterViewWidget>
               inputTextField(sipIdentityField, RegisterInputType.identity),
               inputTextField(sipUsernameField, RegisterInputType.username),
               inputTextField(sipPasswordField, RegisterInputType.password),
-              screenLoading
-                  ? new Container(
-                      width: 50.0,
-                      height: 20.0,
-                      child: CircularProgressIndicator())
-                  : new Container(),
               inputAcceptButton(context, onButtonPressedCallback),
             ],
           ),

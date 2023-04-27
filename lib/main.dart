@@ -2,7 +2,7 @@ import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
 import 'package:flutter/material.dart';
 
 // views
-import 'src/views/splash.dart';
+import 'src/views/SplashView.dart';
 import 'src/views/RegisterView.dart';
 import 'src/views/callhomebasic.dart';
 import 'src/views/callscreen.dart';
@@ -15,7 +15,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,12 +24,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/register',
+      initialRoute: '/splash',
       routes: {
-        '/splash': (context) => SplashWidget(),
-        '/call': (context) => CallScreenWidget(),
-        '/test': (context) => CallInputWidget(),
+        '/splash': (context) => SplashViewWidget(),
         '/register': (context) => RegisterViewWidget(),
+        '/home': (context) => CallInputWidget(),
+        '/call': (context) => CallScreenWidget(),
       },
     );
   }

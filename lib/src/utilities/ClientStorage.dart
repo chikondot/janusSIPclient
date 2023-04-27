@@ -27,4 +27,9 @@ class Storage {
       preferences.setString(key, value);
     });
   }
+
+  static Future<bool> containsKey(String key) async {
+    var preferences = await _instance;
+    return preferences.containsKey(key);
+  }
 }
