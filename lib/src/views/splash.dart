@@ -56,7 +56,7 @@ class _SplashWidgetState extends State<SplashWidget> {
       } else {
         // else proceed to registration page
         Navigator.pop(context);
-        Navigator.pushNamed(context, '/local');
+        Navigator.pushNamed(context, '/register');
       }
     });
 

@@ -1,12 +1,16 @@
+import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
 import 'package:flutter/material.dart';
 
 // views
 import 'src/views/splash.dart';
-import 'src/views/callregisterbasic.dart';
+import 'src/views/RegisterView.dart';
 import 'src/views/callhomebasic.dart';
 import 'src/views/callscreen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Storage.init();
   runApp(MyApp());
 }
 
@@ -21,12 +25,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/local',
+      initialRoute: '/register',
       routes: {
         '/splash': (context) => SplashWidget(),
         '/call': (context) => CallScreenWidget(),
         '/test': (context) => CallInputWidget(),
-        '/local': (context) => CallSimpleRegisterWidget(),
+        '/register': (context) => RegisterViewWidget(),
       },
     );
   }

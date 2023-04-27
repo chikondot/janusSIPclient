@@ -110,7 +110,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                 ),
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/local');
+                Navigator.pushNamed(context, '/register');
               },
             ),
           ],
