@@ -42,7 +42,7 @@ class HomeViewWidgetState extends State<HomeViewWidget> {
     callDestinationField.text = textInstance;
   }
 
-  void onCallButtonPressedCallback() async {
+  void onCallButtonPressedCallback() {
     screenStateUpdate(() {});
     handlePageNavigation();
   }

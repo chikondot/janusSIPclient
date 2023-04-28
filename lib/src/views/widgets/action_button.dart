@@ -82,7 +82,7 @@ class _ActionButtonState extends State<ActionButton> {
                 margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0))
             : Container(
                 margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                child: (widget.number || widget.title == null)
+                child: (widget.number || widget.title.isEmpty)
                     ? null
                     : Text(
                         widget.title,

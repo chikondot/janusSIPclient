@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'src/views/SplashView.dart';
 import 'src/views/RegisterView.dart';
 import 'src/views/HomeView.dart';
-import 'src/views/callscreen.dart';
+import 'src/views/CallView.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/home',
+      initialRoute: '/call',
       routes: {
         '/splash': (context) => SplashViewWidget(),
         '/register': (context) => RegisterViewWidget(),
         '/home': (context) => HomeViewWidget(),
-        '/call': (context) => CallScreenWidget(),
+        '/call': (context) => CallViewWidget(),
       },
     );
   }
