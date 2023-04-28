@@ -32,4 +32,9 @@ class Storage {
     var preferences = await _instance;
     return preferences.containsKey(key);
   }
+
+  static Future<String?> getExistingString(String key) async {
+    var preferences = await _instance;
+    return preferences.containsKey(key) ? preferences.getString(key) : "";
+  }
 }

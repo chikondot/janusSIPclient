@@ -1,127 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
 import 'package:JanusSIPClient/src/utilities/ClientStrings.dart';
 import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
 import 'widgets/noKBEt.dart';
 
-class CallInputWidget extends StatefulWidget {
+class HomeViewWidget extends StatefulWidget {
   @override
-  CallInputWidgetSate createState() => CallInputWidgetSate();
+  HomeViewWidgetState createState() => HomeViewWidgetState();
 }
 
-class CallInputWidgetSate extends State<CallInputWidget> {
-  final TextEditingController _destination = new TextEditingController();
+class HomeViewWidgetState extends State<HomeViewWidget> {
+  final TextEditingController callDestinationField =
+      new TextEditingController();
 
-  SharedPreferences? _preferences;
-  String _account = "";
-  _loadSettings() async {
-    _preferences = await SharedPreferences.getInstance();
-    if (_preferences!.containsKey('contact')) {
-      _account = _preferences!.getString('contact')!;
-    }
-    this.setState(() {});
+  String accountInformation = "";
+
+  void initialViewInformation() async {
+    accountInformation = (await Storage.getExistingString('contact'))!;
   }
 
-  _saveSettings() async {
-    await _preferences!.setString('destination', _destination.text);
+  void persistViewInformation() async {
+    Storage.setString('callDestination', callDestinationField.text);
   }
 
-  @override
-  initState() {
-    super.initState();
-    _loadSettings();
+  bool isTextEmptyOrNull(String text) {
+    return text.isEmpty ? true : false;
   }
 
-  @override
-  deactivate() {
-    super.deactivate();
-    _saveSettings();
+  void screenStateUpdate(Function() callback) => this.setState(callback);
+
+  void onBackspaceButtonPressedCallback([bool deleteAll = false]) async {
+    return isTextEmptyOrNull(callDestinationField.text)
+        ? null
+        : screenStateUpdate(handleTextDeletion); // update to handle deleteAll
   }
 
-  _handleCall(BuildContext buildContext) {
-    // check ::: if destination information has been set
-    if (_destination.text == null || _destination.text.isEmpty) {
-      showDialog<Null>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          // show ::: dialog if no destination
-          return AlertDialog(
-            title: Text('Target is empty.'),
-            content: Text('Please enter a number to dail!'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-      return null;
-    }
-    // set ::: call destination and go to calling screen
-    this.setState(() {});
-    _preferences!.setString('destination', _destination.text);
-    Navigator.pushNamed(context, '/call');
+  void handleTextDeletion() {
+    String textInstance = callDestinationField.text;
+    textInstance = textInstance.substring(0, textInstance.length - 1);
+    callDestinationField.text = textInstance;
   }
 
-  void _handleBackSpace([bool deleteAll = false]) {
-    var text = _destination.text;
-    if (text.isNotEmpty) {
-      this.setState(() {
-        // check ::: remove characters or all from text
-        text = deleteAll ? '' : text.substring(0, text.length - 1);
-        _destination.text = text;
-      });
-    }
+  void onCallButtonPressedCallback() async {
+    screenStateUpdate(() {});
+    handlePageNavigation();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text(Strings.applicationName),
-          backgroundColor: Assets.primaryColor,
-          actions: <Widget>[]
-      ),
-      body: SafeArea(child: dialPad(context)),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            _drawerHeader(),
-            SizedBox(
-              height: 8.0,
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.exit_to_app,
-                color: Assets.primaryColor,
-              ),
-              title: Text(
-                'LogOut',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w300,
-                  color: Assets.primaryColor,
-                ),
-              ),
-              onTap: () {
-                Navigator.pushNamed(context, '/register');
+  void handlePageNavigation([String destination = "/call"]) {
+    Navigator.pushNamed(context, destination);
+  }
+
+  Future<void> showAlertDialog(String title, String content) {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('$title'),
+          content: Text('$content'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _drawerHeader() {
-    // check ::: is account information set
-    if (_account == null) _account = "Please sign in";
+  Widget showDrawerHeader() {
+    if (isTextEmptyOrNull(accountInformation)) accountInformation = "Default";
 
     return DrawerHeader(
       margin: EdgeInsets.zero,
@@ -144,11 +96,12 @@ class CallInputWidgetSate extends State<CallInputWidget> {
             bottom: 12.0,
             left: 16.0,
             child: Text(
-              "$_account",
+              "$accountInformation",
               style: TextStyle(
-                  color: Assets.whiteColor,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w500),
+                color: Assets.whiteColor,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
@@ -193,7 +146,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
         new Padding(
           padding: EdgeInsets.only(left: 40.0, right: 40.0, bottom: 5.0),
           child: new NoKeyboardEditableText(
-            controller: _destination,
+            controller: callDestinationField,
             style: TextStyle(fontSize: 30.0, color: Assets.blackColor),
             cursorColor: Colors.transparent,
             selectionColor: Colors.transparent,
@@ -208,6 +161,14 @@ class CallInputWidgetSate extends State<CallInputWidget> {
             shrinkWrap: true,
             childAspectRatio: 1.95,
             children: List.generate(numbers.length, (index) {
+              void onTapAction() {
+                callDestinationField.text += numbers[index];
+              }
+
+              void onLongPressAction() {
+                if (numbers[index] == "0") callDestinationField.text += "+";
+              }
+
               return new GridTile(
                 child: new Card(
                   shape: RoundedRectangleBorder(
@@ -218,20 +179,8 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                   elevation: 0.5,
                   color: Colors.grey,
                   child: new InkWell(
-                    onTap: () {
-                      if (_destination.text == "Enter phone number:") {
-                        _destination.text = "";
-                        this.setState(() {});
-                      }
-
-                      // TODO ::: fix cursor issue
-                      _destination.text += numbers[index];
-                    },
-                    onLongPress: () {
-                      if (numbers[index] == "0") {
-                        _destination.text += "+";
-                      }
-                    },
+                    onTap: onTapAction,
+                    onLongPress: onLongPressAction,
                     child: new Center(
                       child: new Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -286,9 +235,7 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                 child: new FloatingActionButton(
                   heroTag: "voice_call",
                   backgroundColor: Assets.greenColor,
-                  onPressed: () {
-                    _handleCall(context);
-                  },
+                  onPressed: onCallButtonPressedCallback,
                   tooltip: 'Dial',
                   mini: false,
                   shape: RoundedRectangleBorder(
@@ -313,8 +260,8 @@ class CallInputWidgetSate extends State<CallInputWidget> {
                   color: Assets.redColor,
                   child: new InkWell(
                     radius: 50.0,
-                    onTap: () => _handleBackSpace(),
-                    onLongPress: () => _handleBackSpace(true),
+                    onTap: () => onBackspaceButtonPressedCallback(),
+                    onLongPress: () => onBackspaceButtonPressedCallback(true),
                     child: new Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Icon(
@@ -329,6 +276,60 @@ class CallInputWidgetSate extends State<CallInputWidget> {
           ),
         ),
       ],
+    );
+  }
+
+  /// *************************************************************
+  /// *********** MAIN BUILD FUNCTION *****************************
+  /// *************************************************************
+
+  @override
+  initState() {
+    super.initState();
+    initialViewInformation();
+  }
+
+  @override
+  deactivate() {
+    super.deactivate();
+    persistViewInformation();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(Strings.applicationName),
+          backgroundColor: Assets.primaryColor,
+          actions: <Widget>[]),
+      body: SafeArea(child: dialPad(context)),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            showDrawerHeader(),
+            SizedBox(
+              height: 8.0,
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.exit_to_app,
+                color: Assets.primaryColor,
+              ),
+              title: Text(
+                'LogOut',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w300,
+                  color: Assets.primaryColor,
+                ),
+              ),
+              onTap: () {
+                handlePageNavigation("/register");
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

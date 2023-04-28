@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // views
 import 'src/views/SplashView.dart';
 import 'src/views/RegisterView.dart';
-import 'src/views/callhomebasic.dart';
+import 'src/views/HomeView.dart';
 import 'src/views/callscreen.dart';
 
 void main() async {
@@ -24,11 +24,11 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/splash',
+      initialRoute: '/home',
       routes: {
         '/splash': (context) => SplashViewWidget(),
         '/register': (context) => RegisterViewWidget(),
-        '/home': (context) => CallInputWidget(),
+        '/home': (context) => HomeViewWidget(),
         '/call': (context) => CallScreenWidget(),
       },
     );
