@@ -7,6 +7,8 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 
+
+
 // set global variable
 Janus janus = new Janus();
 
@@ -19,11 +21,13 @@ class Janus {
     return _janus;
   }
 
-  IOWebSocketChannel? _channel = null;
+  IOWebSocketChannel? _channel;
   bool _onConnected = false;
 
   bool get status => _onConnected;
+
   bool get callStatus => _onRinging;
+
   bool get callAnswerd => _onAnswered;
 
   _reset() {
@@ -74,9 +78,9 @@ class Janus {
   int _handleID = 0;
 
   // SDP variables used.
-  RTCSessionDescription? _description = null;
-  MediaStream? _stream = null;
-  RTCPeerConnection? _pc = null;
+  RTCSessionDescription? _description;
+  MediaStream? _stream;
+  RTCPeerConnection? _pc;
   dynamic onLocalStream;
   dynamic onRemoteStream;
 

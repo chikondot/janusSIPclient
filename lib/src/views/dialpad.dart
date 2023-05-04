@@ -234,7 +234,7 @@ class _DialPadWidget extends State<DialPadWidget> {
                   print("PARSED MESSAGE >> $_message");
 
                   if (_timer != null) _timer!.cancel();
-                  if (_socket.sink != null) _socket.sink.close();
+                   _socket.sink.close();
                   break;
                 case 'detached':
                   print("DETACHED SESSION >>>");
@@ -295,9 +295,9 @@ class _DialPadWidget extends State<DialPadWidget> {
 
   /// send message to server for action
   _send(Object message) {
-    if (_socket.sink != null) {
+
       _socket.sink.add(json.encode(message));
-    }
+
   }
 
   // keep track of time spent on call

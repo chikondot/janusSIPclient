@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:JanusSIPClient/src/services/janus.dart';
+import 'package:JanusSIPClient/src/services/janus_impl.dart';
+import 'package:JanusSIPClient/src/services/janus_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
@@ -11,7 +14,7 @@ class CallViewWidget extends StatefulWidget {
   CallViewWidgetState createState() => CallViewWidgetState();
 }
 
-class CallViewWidgetState extends State<CallViewWidget> with CallAudioManager {
+class CallViewWidgetState extends State<CallViewWidget> with CallAudioManager, CallJanusManager {
   Timer? callScreenTimer;
 
   String callScreenTimerLabel = "00:00";
@@ -29,8 +32,10 @@ class CallViewWidgetState extends State<CallViewWidget> with CallAudioManager {
   void screenStateUpdate(Function() callback) => this.setState(callback);
 
   void onBackButtonPressed() {
-    screenStateUpdate(handleCallTimerStop);
-    handlePageNavigation();
+    janusImpl.outgoingCall("callDestination");
+
+    // screenStateUpdate(handleCallTimerStop);
+    // handlePageNavigation();
   }
 
   void handlePageNavigation() {
@@ -203,6 +208,10 @@ enum CallStatusManager {
 
   final String string;
   final Color color;
+}
+
+class CallJanusManager {
+  JanusImplementation janusImpl = JanusImplementation(new JanusManager());
 }
 
 class CallAudioManager {
