@@ -1,0 +1,5 @@
+{
+  "janus": "keepalive",
+  "session_id": "session_id",
+  "transaction": "transaction_id"
+}

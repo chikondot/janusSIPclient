@@ -1,5 +1,5 @@
-import 'package:JanusSIPClient/src/services/janus_manager.dart';
-import 'package:JanusSIPClient/src/services/janus_protocol.dart';
+import 'package:JanusSIPClient/src/services/janus/janus_manager.dart';
+import 'package:JanusSIPClient/src/services/janus/janus_protocol.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -43,6 +43,16 @@ class JanusImplementation implements JanusProtocol {
       );
 
       listenWebsocketConnection();
+    } catch (error) {
+      print('error: $error');
+      throw error;
+    }
+  }
+
+  Future deInitWebsocketConnection() async {
+    try {
+      manager.webSocketChannel.sink.close();
+
     } catch (error) {
       print('error: $error');
       throw error;
@@ -96,17 +106,23 @@ class JanusImplementation implements JanusProtocol {
   }
 
   void onDone() {
-    print('onDone:');
+    print('onDone');
   }
 
   @override
-  void declineCall() {}
+  void declineCall() {
+    destroyCall();
+  }
 
   @override
-  void destroyCall() {}
+  void hangupCall() {
+    destroyCall();
+  }
 
   @override
-  void hangupCall() {}
+  void destroyCall() async {
+    await deInitWebsocketConnection();
+  }
 
   @override
   void Function(bool p1) incoming() {
@@ -116,6 +132,10 @@ class JanusImplementation implements JanusProtocol {
   @override
   void outgoingCall(String callDestination) async {
     await initWebsocketConnection();
-    offer();
+  }
+
+  @override
+  void startSession() async {
+
   }
 }

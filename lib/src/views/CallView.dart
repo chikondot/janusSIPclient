@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:JanusSIPClient/src/services/janus.dart';
-import 'package:JanusSIPClient/src/services/janus_impl.dart';
-import 'package:JanusSIPClient/src/services/janus_manager.dart';
+import 'package:JanusSIPClient/src/services/janus/janus_impl.dart';
+import 'package:JanusSIPClient/src/services/janus/janus_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
@@ -32,10 +31,8 @@ class CallViewWidgetState extends State<CallViewWidget> with CallAudioManager, C
   void screenStateUpdate(Function() callback) => this.setState(callback);
 
   void onBackButtonPressed() {
-    janusImpl.outgoingCall("callDestination");
-
-    // screenStateUpdate(handleCallTimerStop);
-    // handlePageNavigation();
+    screenStateUpdate(handleCallTimerStop);
+    handlePageNavigation();
   }
 
   void handlePageNavigation() {
@@ -54,7 +51,10 @@ class CallViewWidgetState extends State<CallViewWidget> with CallAudioManager, C
 
   // keep track of time spent on call
   void handleCallTimerStart() async {
-    if (callScreenTimer == null || callScreenTimer!.isActive) return;
+    // TODO :: CLEAN!
+    if (callScreenTimer != null) {
+     if (callScreenTimer!.isActive) return;
+    }
 
     callScreenTimer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       Duration duration = Duration(seconds: timer.tick);

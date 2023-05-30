@@ -1,0 +1,5 @@
+{
+  "sip" : "event",
+  "error_code" : "numeric ID, check Macros below",
+  "error" : "error description as a string>"
+}

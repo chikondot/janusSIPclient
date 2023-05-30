@@ -16,3 +16,9 @@ class JanusManager {
   Future<MediaStream> get mediaStream =>
       navigator.mediaDevices.getUserMedia({"audio": true, "video": null});
 }
+
+// TODO :: move bool state management to be more concise [onConnected, onAttached]
+enum JanusState {
+  CONNECTED,
+  ATTACHED
+}
