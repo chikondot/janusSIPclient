@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:JanusSIPClient/src/utilities/ClientStrings.dart';
-import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
-import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
-import 'package:JanusSIPClient/src/views/widgets/AlertView.dart';
+import 'package:generic_voip_client/src/utilities/ClientStrings.dart';
+import 'package:generic_voip_client/src/utilities/ClientAssets.dart';
+import 'package:generic_voip_client/src/utilities/ClientStorage.dart';
+import 'package:generic_voip_client/src/views/widgets/AlertView.dart';
 
 class RegisterViewWidget extends StatefulWidget {
   @override

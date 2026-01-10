@@ -1,5 +1,5 @@
-import 'package:JanusSIPClient/src/services/janus/janus_manager.dart';
-import 'package:JanusSIPClient/src/services/janus/janus_protocol.dart';
+import 'package:generic_voip_client/src/services/janus/janus_manager.dart';
+import 'package:generic_voip_client/src/services/janus/janus_protocol.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:web_socket_channel/io.dart';
 

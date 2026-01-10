@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
-import 'package:JanusSIPClient/src/utilities/ClientStrings.dart';
-import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
+import 'package:generic_voip_client/src/utilities/ClientStorage.dart';
+import 'package:generic_voip_client/src/utilities/ClientStrings.dart';
+import 'package:generic_voip_client/src/utilities/ClientAssets.dart';
 import 'widgets/noKBEt.dart';
 
 class HomeViewWidget extends StatefulWidget {

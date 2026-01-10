@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
-import 'package:JanusSIPClient/src/utilities/ClientStrings.dart';
-import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
+import 'package:generic_voip_client/src/utilities/ClientStorage.dart';
+import 'package:generic_voip_client/src/utilities/ClientStrings.dart';
+import 'package:generic_voip_client/src/utilities/ClientAssets.dart';
 
 class SplashViewWidget extends StatefulWidget {
   @override

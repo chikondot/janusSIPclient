@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:JanusSIPClient/src/services/janus/janus_impl.dart';
-import 'package:JanusSIPClient/src/services/janus/janus_manager.dart';
+import 'package:generic_voip_client/src/services/janus/janus_impl.dart';
+import 'package:generic_voip_client/src/services/janus/janus_manager.dart';
 import 'package:flutter/material.dart';
 
-import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
-import 'package:JanusSIPClient/src/utilities/ClientAssets.dart';
+import 'package:generic_voip_client/src/utilities/ClientStorage.dart';
+import 'package:generic_voip_client/src/utilities/ClientAssets.dart';
 
 import 'widgets/action_button.dart';
 

@@ -322,7 +322,7 @@ class _DialPadWidget extends State<DialPadWidget> {
         "audio": true,
         "video": null
       };
-      _stream = await navigator.getUserMedia(mediaConstraints);
+      _stream = await mediaDevices.getUserMedia(mediaConstraints);
       if (this.onLocalStream != null) this.onLocalStream(_stream);
       _pc = await createPeerConnection(configuration, _config);
       _pc!.onIceGatheringState = (state) async {

@@ -1,4 +1,4 @@
-import 'package:JanusSIPClient/src/utilities/ClientStorage.dart';
+import 'package:generic_voip_client/src/utilities/ClientStorage.dart';
 import 'package:flutter/material.dart';
 
 // views
@@ -18,13 +18,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Janus SIP Client',
+      title: 'Generic VoIP Client',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/call',
+      initialRoute: '/home',
       routes: {
         '/splash': (context) => SplashViewWidget(),
         '/register': (context) => RegisterViewWidget(),

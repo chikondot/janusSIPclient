@@ -1,4 +1,4 @@
-name: JanusSIPClient
+name: generic_voip_client
 description: This is a test project to test janus implementation in flutter
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -13,14 +13,14 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.5
-  web_socket_channel: ^2.4.0
-  flutter_webrtc: ^0.9.26
+  web_socket_channel: ^3.0.3
+  flutter_webrtc: ^1.2.1
   shared_preferences: ^2.1.0
-  permission_handler: ^10.2.0
+  permission_handler: ^12.0.1
   crypto: ^3.0.2
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
 
